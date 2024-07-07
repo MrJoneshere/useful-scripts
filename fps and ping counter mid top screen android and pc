@@ -1,59 +1,51 @@
--- Roblox Studio'da bir LocalScript olarak çalıştırın.
 local Players = game:GetService("Players")
 
--- ScreenGui oluştur
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "FPSAndPingCounter"
 screenGui.ResetOnSpawn = false
 screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
--- FPS TextLabel oluştur
 local fpsLabel = Instance.new("TextLabel")
 fpsLabel.Name = "FPSLabel"
-fpsLabel.Size = UDim2.new(0, 80, 0, 20) -- Boyutunu biraz daha küçülttük
-fpsLabel.Position = UDim2.new(0.5, -90, 0, 20) -- Ekranın ortasında ve en üstte
-fpsLabel.AnchorPoint = Vector2.new(1, 0) -- Sağ üst köşeyi referans al
+fpsLabel.Size = UDim2.new(0, 80, 0, 20)
+fpsLabel.Position = UDim2.new(0.5, -90, 0, 20)
+fpsLabel.AnchorPoint = Vector2.new(1, 0)
 fpsLabel.BackgroundTransparency = 0.5
-fpsLabel.BackgroundColor3 = Color3.new(0, 0, 0) -- Siyah arka plan
-fpsLabel.TextColor3 = Color3.new(1, 1, 1) -- Beyaz yazı
+fpsLabel.BackgroundColor3 = Color3.new(0, 0, 0)
+fpsLabel.TextColor3 = Color3.new(1, 1, 1)
 fpsLabel.Font = Enum.Font.SourceSans
-fpsLabel.TextSize = 12 -- Yazı boyutunu düzelttik
+fpsLabel.TextSize = 12
 fpsLabel.Text = "FPS: 0"
 fpsLabel.Parent = screenGui
 
--- FPS TextLabel için UICorner ekle
 local fpsUICorner = Instance.new("UICorner")
-fpsUICorner.CornerRadius = UDim.new(0, 10) -- Köşeleri 10 piksel yuvarla
+fpsUICorner.CornerRadius = UDim.new(0, 10)
 fpsUICorner.Parent = fpsLabel
 
--- Ping TextLabel oluştur
 local pingLabel = Instance.new("TextLabel")
 pingLabel.Name = "PingLabel"
-pingLabel.Size = UDim2.new(0, 80, 0, 20) -- Boyutunu biraz daha küçülttük
-pingLabel.Position = UDim2.new(0.5, 10, 0, 20) -- FPS Label'in yanında ve en üstte
-pingLabel.AnchorPoint = Vector2.new(0, 0) -- Sol üst köşeyi referans al
+pingLabel.Size = UDim2.new(0, 80, 0, 20)
+pingLabel.Position = UDim2.new(0.5, 10, 0, 20)
+pingLabel.AnchorPoint = Vector2.new(0, 0)
 pingLabel.BackgroundTransparency = 0.5
-pingLabel.BackgroundColor3 = Color3.new(0, 0, 0) -- Siyah arka plan
-pingLabel.TextColor3 = Color3.new(1, 1, 1) -- Beyaz yazı
+pingLabel.BackgroundColor3 = Color3.new(0, 0, 0)
+pingLabel.TextColor3 = Color3.new(1, 1, 1)
 pingLabel.Font = Enum.Font.SourceSans
-pingLabel.TextSize = 12 -- Yazı boyutunu düzelttik
+pingLabel.TextSize = 12
 pingLabel.Text = "Ping: 0 ms"
 pingLabel.Parent = screenGui
 
--- Ping TextLabel için UICorner ekle
 local pingUICorner = Instance.new("UICorner")
-pingUICorner.CornerRadius = UDim.new(0, 10) -- Köşeleri 10 piksel yuvarla
+pingUICorner.CornerRadius = UDim.new(0, 10)
 pingUICorner.Parent = pingLabel
 
--- FPS ve Ping güncelleme fonksiyonu
 local lastTime = tick()
-local fpsUpdateInterval = 0.5 -- FPS sayacını 0.5 saniyede bir güncelle
-local pingUpdateInterval = 1 -- Ping sayacını 1 saniyede bir güncelle
+local fpsUpdateInterval = 0.5
+local pingUpdateInterval = 1
 local fpsAccumulator = 0
 local fpsFrames = 0
 
 local function updateCounters(deltaTime)
-    -- FPS hesapla
     fpsAccumulator = fpsAccumulator + deltaTime
     fpsFrames = fpsFrames + 1
 
@@ -64,7 +56,6 @@ local function updateCounters(deltaTime)
         fpsFrames = 0
     end
 
-    -- Ping al
     if tick() - lastTime >= pingUpdateInterval then
         local ping = math.floor(Players.LocalPlayer:GetNetworkPing() * 1000)
         pingLabel.Text = "Ping: " .. ping .. " ms"
@@ -72,5 +63,4 @@ local function updateCounters(deltaTime)
     end
 end
 
--- RenderStepped bağla, her karede güncelleme yapar
 game:GetService("RunService").RenderStepped:Connect(updateCounters)
